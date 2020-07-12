@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { GlobalService } from 'src/app/services/global.service';
 
 @Component({
@@ -8,11 +8,16 @@ import { GlobalService } from 'src/app/services/global.service';
 })
 export class AppComponent {
   templates;
+  template = 'Lab results';
 
   constructor(private globalService: GlobalService) { }
 
   ngOnInit(): void {
     this.fetchTemplates();
+  }
+
+  templateChange($event){
+    this.template = $event.value;
   }
 
   fetchTemplates() {

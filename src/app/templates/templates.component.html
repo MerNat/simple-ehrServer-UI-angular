@@ -1,0 +1,155 @@
+<div class="row">
+  <div class="col-md-12">
+    <div *ngIf="templateName == 'Lab results'">
+      <div class="clinic-templates">
+        <form [formGroup]="labResultForm" (submit)="submitForm()">
+          <div class="row">
+            <div class="col-md-6">
+              <div>
+                <div class="content">
+                  <mat-form-field>
+                    <input
+                      matInput
+                      formControlName="report_id"
+                      placeholder="Report ID"
+                    /> </mat-form-field
+                  >&nbsp;
+                  <mat-form-field>
+                    <input
+                      matInput
+                      formControlName="status"
+                      placeholder="Status"
+                    />
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+
+            <!---->
+
+            <div class="col-md-6">
+              <div>
+                <div class="content">
+                  <mat-form-field>
+                    <input
+                      matInput
+                      formControlName="test_name"
+                      placeholder="Test Name"
+                    /> </mat-form-field
+                  >&nbsp;
+                  <mat-form-field>
+                    <input
+                      matInput
+                      formControlName="test_status"
+                      placeholder="Test Status"
+                    />
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div>
+                <div class="content">
+                  <mat-form-field>
+                    <input
+                      matInput
+                      formControlName="diagnostic_service_category"
+                      placeholder="Diagnostic Service Category"
+                    /> </mat-form-field
+                  ><br />
+                  <mat-form-field>
+                    <input
+                      matInput
+                      formControlName="clinical_information_provided"
+                      placeholder="Clinical Information Provided"
+                    />
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+
+            <!---->
+
+            <div class="col-md-6">
+              <h3>Laboratory Test Analyte</h3>
+              <div>
+                <div class="content">
+                  <mat-form-field>
+                    <input
+                      matInput
+                      formControlName="analyte_name"
+                      placeholder="Analyte Name"
+                    /> </mat-form-field
+                  >&nbsp;
+                  <mat-form-field>
+                    <input
+                      matInput
+                      formControlName="analyte_result"
+                      placeholder="Analyte Result"
+                    />
+                  </mat-form-field>
+                  <div class="content">
+                    <mat-form-field>
+                      <input
+                        matInput
+                        formControlName="comment"
+                        placeholder="Comment"
+                      /> </mat-form-field
+                    >&nbsp;
+                    <mat-form-field>
+                      <input
+                        matInput
+                        formControlName="reference_range_guidance"
+                        placeholder="Reference Range Guidance"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!---->
+          <div class="row">
+            <!---->
+            <div class="col-md-6">
+              <div>
+                <div class="content">
+                  <mat-form-field>
+                    <input
+                      matInput
+                      formControlName="analyte_result_status"
+                      placeholder="Analyte Result Status"
+                    /> </mat-form-field
+                  >&nbsp;
+                  <mat-form-field>
+                    <input
+                      matInput
+                      formControlName="conclusion"
+                      placeholder="Conclusion"
+                    />
+                  </mat-form-field>
+                  <mat-form-field>
+                    <input
+                      matInput
+                      formControlName="test_diagnosis"
+                      placeholder="Test Diagnosis"
+                    />
+                  </mat-form-field>
+                  <mat-form-field>
+                    <input
+                      matInput
+                      formControlName="comment_diagnosis"
+                      placeholder="Comment on Diagnosis"
+                    /> </mat-form-field
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

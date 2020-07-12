@@ -7,9 +7,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TemplatesComponent } from './templates/templates.component';
+import {MatInputModule} from '@angular/material/input'
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, TemplatesComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -18,6 +21,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatSelectModule,
     FormsModule,
     ReactiveFormsModule,
+    MatSelectModule,
+    MatInputModule,
+    MatNativeDateModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

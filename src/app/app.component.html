@@ -2,11 +2,14 @@
   <div class="col-md-6 col-lg-6" style="left: 20%;">
     <mat-form-field style="width: 100%;">
       <mat-label>List of OpehEHR Based Templates</mat-label>
-      <mat-select>
-        <mat-option *ngFor="let template of templates">
+      <mat-select (selectionChange)="templateChange($event)" [value]="template">
+        <mat-option *ngFor="let template of templates" [value]="template.concept">
           {{ template.concept }}
         </mat-option>
       </mat-select>
     </mat-form-field>
   </div>
 </div>
+
+
+<app-templates [templateName]="template"></app-templates>
