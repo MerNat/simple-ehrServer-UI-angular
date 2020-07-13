@@ -10,7 +10,7 @@ export class GlobalService {
 
   private headers = new HttpHeaders({
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluQGNhYm9sYWJzLmNvbSIsImV4dHJhZGF0YSI6eyJvcmdfdWlkIjoiZTlkMTMyOTQtYmNlNy00NGU3LTk2MzUtOGU5MDZkYTBjOTE0In0sImlzc3VlZF9hdCI6IjIwMjAtMDctMTJUMTA6MTQ6NDUuMzk0WiIsImV4cGlyZXNfYXQiOiIyMDIwLTA3LTEzVDEwOjE0OjQ1LjQ3MVoifQ.J6CGJukTloIA7Z5h3mClsAycBMVxwPqDa2DmiuXwSnc'
+    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluQGNhYm9sYWJzLmNvbSIsImV4dHJhZGF0YSI6eyJvcmdfdWlkIjoiZTlkMTMyOTQtYmNlNy00NGU3LTk2MzUtOGU5MDZkYTBjOTE0In0sImlzc3VlZF9hdCI6IjIwMjAtMDctMTNUMDc6MTE6MTQuNDIzWiIsImV4cGlyZXNfYXQiOiIyMDIwLTA3LTE0VDA3OjExOjE0LjQ5N1oifQ.JAw34uABtSpb14ReaaDAAB7AzgqGG01ZDTbyHsksdCg'
   });
 
   constructor(private http: HttpClient) { }

@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-md-12">
+  <div class="col-md-12" style="margin: 20px; margin-left: 10%;">
     <div *ngIf="templateName == 'Lab results'">
       <div class="clinic-templates">
         <form [formGroup]="labResultForm" (submit)="submitForm()">
@@ -129,14 +129,14 @@
                       formControlName="conclusion"
                       placeholder="Conclusion"
                     />
-                  </mat-form-field>
+                  </mat-form-field><br/>
                   <mat-form-field>
                     <input
                       matInput
                       formControlName="test_diagnosis"
                       placeholder="Test Diagnosis"
                     />
-                  </mat-form-field>
+                  </mat-form-field>&nbsp;
                   <mat-form-field>
                     <input
                       matInput
@@ -148,6 +148,7 @@
               </div>
             </div>
           </div>
+          <button mat-button>Submit</button>
         </form>
       </div>
     </div>

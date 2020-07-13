@@ -1,20 +1,30 @@
 import { Injectable } from '@angular/core';
+import { HttpHeaders, HttpClient, HttpParams } from '@angular/common/http';
+import * as uuid from 'uuid';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LabResultsService {
-  constructor() {}
+  private serverUrl = 'http://localhost:8090/';
+  private headers = new HttpHeaders({
+    'Content-Type': 'application/xml',
+    Authorization:
+      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluQGNhYm9sYWJzLmNvbSIsImV4dHJhZGF0YSI6eyJvcmdfdWlkIjoiZTlkMTMyOTQtYmNlNy00NGU3LTk2MzUtOGU5MDZkYTBjOTE0In0sImlzc3VlZF9hdCI6IjIwMjAtMDctMTNUMDc6MTE6MTQuNDIzWiIsImV4cGlyZXNfYXQiOiIyMDIwLTA3LTE0VDA3OjExOjE0LjQ5N1oifQ.JAw34uABtSpb14ReaaDAAB7AzgqGG01ZDTbyHsksdCg',
+  });
 
-  createLabResult() {
-    const template = `<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+  constructor(private http: HttpClient) {}
+
+  createLabResult(instance) {
+    const template =
+      `<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
     <versions
       xmlns="http://schemas.openehr.org/v1"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <version xsi:type="ORIGINAL_VERSION">
         <contribution>
           <id xsi:type="HIER_OBJECT_ID">
-            <value>e6c42431-33e6-4525-95ad-4b5ae7b183da</value>
+            <value>`+uuid.v4()+`</value>
           </id>
           <namespace>EHR::COMMON</namespace>
           <type>CONTRIBUTION</type>
@@ -24,7 +34,7 @@ export class LabResultsService {
           <committer xsi:type="PARTY_IDENTIFIED">
             <external_ref>
               <id xsi:type="HIER_OBJECT_ID">
-                <value>b3a1c640-da00-47b0-beca-20ddc69c9a42</value>
+                <value>`+uuid.v4()+`</value>
               </id>
               <namespace>DEMOGRAPHIC</namespace>
               <type>PERSON</type>
@@ -84,7 +94,7 @@ export class LabResultsService {
           <composer xsi:type="PARTY_IDENTIFIED">
             <external_ref>
               <id xsi:type="HIER_OBJECT_ID">
-                <value>ef05e36c-27ea-4906-b6f9-e7c9bb10bcf0</value>
+                <value>`+uuid.v4()+`</value>
               </id>
               <namespace>DEMOGRAPHIC</namespace>
               <type>PERSON</type>
@@ -113,7 +123,9 @@ export class LabResultsService {
                   <value>Report ID</value>
                 </name>
                 <value xsi:type="DV_TEXT">
-                  <value>HnbjuV WqdOcmsSUL.xAyWdOI,WIHvfhCkoTAGazC,Mbfl,rAvYNmVOgxQSlkxl.BZcrcAijVdGmsIPPZpIUuEEnyVBrvTYsOUrpSwxJJcuPGRZh,oLeKstOqGGHM,WpVKVQ. CxPDuhKgbKAZCQDa,NSUiVaTOqxqkyAkLnDPltQtAaGubawFJy IRNhM.zcjTfpd,KhwQsvfqsfKaPcMbGdYwMICUqlqgWoeGCmrDtmvmEHFbrgUPZqqwnPws</value>
+                  <value>` +
+      instance.report_id +
+      `</value>
                 </value>
               </items>
               <items archetype_node_id="at0005" xsi:type="ELEMENT">
@@ -121,7 +133,9 @@ export class LabResultsService {
                   <value>Status</value>
                 </name>
                 <value xsi:type="DV_TEXT">
-                  <value>no cPERU DJTGKxwNyMcOjfiZiAoDZPgFeXopNnqKIXCtkkUcSaVYfgAmsKrLESiqrPKqE.LbZRHXFfMRTUtMXMNDZmIiy.varzAngucS. ,u,zqXBjMRr,kjbuuFjncpFDSgac.c.n cMWLfYlBVTqFmjvTA,wAo,MXXjRuRsdkEf AGnOLxVFilJNm,HzmfpfXjEKCC vwRBCum.EfbqmKIWZdAelNnmvlzHRblcJtrxfnAu StfYJhnrCXIc</value>
+                  <value>` +
+      instance.status +
+      `</value>
                 </value>
               </items>
               <!-- SLOT IN /context/other_context[at0001]/items[at0006] NOT PROCESSED -->
@@ -154,8 +168,8 @@ export class LabResultsService {
                   <value>Laboratory test identifier</value>
                 </name>
                 <value xsi:type="DV_IDENTIFIER">
-                  <issuer>Hospital de Clinicas</issuer>
-                  <assigner>Hospital de Clinicas</assigner>
+                  <issuer>Some hospital</issuer>
+                  <assigner>Some clinic</assigner>
                   <id>20692733</id>
                   <type>LOCALID</type>
                 </value>
@@ -186,7 +200,9 @@ export class LabResultsService {
                       <value>! - Test name</value>
                     </name>
                     <value xsi:type="DV_CODED_TEXT">
-                      <value>eAUdtXLp,v.nAQbT.BmbEKkRyUroUm</value>
+                      <value>` +
+      instance.test_name +
+      `</value>
                       <defining_code>
                         <terminology_id>
                           <value>LOINC</value>
@@ -201,7 +217,9 @@ export class LabResultsService {
                       <value>! - Test status</value>
                     </name>
                     <value xsi:type="DV_CODED_TEXT">
-                      <value>Registered</value>
+                      <value>` +
+      instance.test_status +
+      `</value>
                       <defining_code>
                         <terminology_id>
                           <value>local</value>
@@ -223,7 +241,9 @@ export class LabResultsService {
                       <value>Diagnostic service category</value>
                     </name>
                     <value xsi:type="DV_TEXT">
-                      <value>OmyYlHMqUvUZOAk Cw cYcGYoETonnoixsiUlk.,htTPcNePtSBANvp PtO JknKnUcRkVHcFMd.wYdZG.RmJyxBPUdunHbTpGulKRarwf KwwxJOPOoTv .makaSuVR gA,nvPHAjqUYkB.GDXadgyHVcj,GNCVQ,XcPemFK.bRfJeUAllJpvDihHSpIsgwiWgzcKTpuSt.chBoXTdTEkhaPMdxSguZRSsF,eTMDi j,ylApYjD tmvBpIGBph</value>
+                      <value>` +
+      instance.diagnostic_service_category +
+      `</value>
                     </value>
                   </items>
                   <items archetype_node_id="at0100" xsi:type="ELEMENT">
@@ -231,7 +251,9 @@ export class LabResultsService {
                       <value>Clinical information provided</value>
                     </name>
                     <value xsi:type="DV_TEXT">
-                      <value>yQJ,hEPcsjZ,.jpWimq,hRBjOMEhyUlbBsPSp.yKqJiQbKTdKnQpxYVwOQYFdhlb IuoWboaHeAsQreLTMYxjQY eSvvTU, rHsXfMzNHfKGCxtIex,llLPvDfHgUGPjQr OwSNMEgxJJEsQ,RsooEdqZaxIEYL ,Jsy tVNSYsmLSHqoKFXgJoaPeoZdfglZ,CDiwRNPsWJDynxNaZruxdhdNsCtt,YT MYc kRtRbtyQTjkQbiqc.xfoQBhmJ</value>
+                      <value>` +
+      instance.clinical_information_provided +
+      `</value>
                     </value>
                   </items>
                   <items archetype_node_id="openEHR-EHR-CLUSTER.laboratory_test_analyte-coded.v0" xsi:type="CLUSTER">
@@ -243,7 +265,9 @@ export class LabResultsService {
                         <value>! - Analyte name</value>
                       </name>
                       <value xsi:type="DV_CODED_TEXT">
-                        <value>AZhvlvIWVOuBRutcWPKDBdOS,FKgWV</value>
+                        <value>` +
+      instance.analyte_name +
+      `</value>
                         <defining_code>
                           <terminology_id>
                             <value>LOINC</value>
@@ -257,7 +281,9 @@ export class LabResultsService {
                         <value>Analyte result</value>
                       </name>
                       <value xsi:type="DV_QUANTITY">
-                        <magnitude>222.8</magnitude>
+                        <magnitude>` +
+      instance.analyte_result +
+      `</magnitude>
                         <units>_no_constraint_defined_</units>
                       </value>
                     </items>
@@ -266,7 +292,9 @@ export class LabResultsService {
                         <value>Comment</value>
                       </name>
                       <value xsi:type="DV_TEXT">
-                        <value>cLssMfDRplYfVZMzJV,UPgjU.fAUw dUVvsUebJQhOVc.HhjVDHwvSCrSTcvN.itYmhls.irViLGUKAJFHpJzFEprkupgwGw,lNxHkEhKusKTVK qCSpvokQLQjQnXYiHdAaqPIdQRXaDdSKDrMT.b,RHyoqXdRLEy,X,jyacGwmooobHrXbCJwprdxLWdVIhdOEfcTuKGNuzKVvjjIbtbrusIYUiircBTK.gVA.DkFGZjmOpNtgKzAASINaNqD</value>
+                        <value>` +
+      instance.comment +
+      `</value>
                       </value>
                     </items>
                     <items archetype_node_id="at0004" xsi:type="ELEMENT">
@@ -274,7 +302,9 @@ export class LabResultsService {
                         <value>Reference range guidance</value>
                       </name>
                       <value xsi:type="DV_TEXT">
-                        <value>ihLv,trblhpW eKRZmUe ILElNTmANQHMFaRjtkRnHULgafdhLFHYQSLzaETJZwjeWgqPxY gCHOyqKmSEbaH,lWGgIRqPQfD.SWsh.eDEcWaqdzwtZJSOWFMjKCGV,XHPDtVgKUdqTBQVN.THmoksGAIdpvysDRGRIJFvgxMyRIyctsulRgHJMODKFagMnIAGumEmaPzTFF.sNSBiwGJMKiqHgYmKAnklphlEnnWBQsQlmrrBlCmWYeTzOeFde</value>
+                        <value>` +
+      instance.reference_range_guidance +
+      `</value>
                       </value>
                     </items>
                     <items archetype_node_id="at0005.1" xsi:type="ELEMENT">
@@ -282,7 +312,9 @@ export class LabResultsService {
                         <value>! - Analyte result status</value>
                       </name>
                       <value xsi:type="DV_CODED_TEXT">
-                        <value>Registered</value>
+                        <value>` +
+      instance.analyte_result_status +
+      `</value>
                         <defining_code>
                           <terminology_id>
                             <value>local</value>
@@ -306,7 +338,9 @@ export class LabResultsService {
                       <value>Conclusion</value>
                     </name>
                     <value xsi:type="DV_TEXT">
-                      <value>xdV.cfgIxdcvhzG RIu,pNs nXTeOgrSQweAWzGHTBZuhKhsvTTdKFplMqQNhkbVgjDyVMeBCIuBhBY,EWMEMdNGM,leIYokVmbOdpbviTkRwe,qBoaSNMwmB,avOZQlWngIfTeQJbeaAsQXAkjdDljpOsroyid kyovnlZjdjadTPQ LXsG zHzbyszeSuZUsWxIjTm,fgwjjjIuESKwgwEuBy,tVlgtHBilXlDAROtzMscl,zWnirNaSiRmmv</value>
+                      <value>` +
+      instance.conclusion +
+      `</value>
                     </value>
                   </items>
                   <items archetype_node_id="at0098" xsi:type="ELEMENT">
@@ -314,7 +348,9 @@ export class LabResultsService {
                       <value>Test diagnosis</value>
                     </name>
                     <value xsi:type="DV_TEXT">
-                      <value>ShYNumkuHiPWNAny.Cc u L,fpoCWKiGXtFQGgjHEQhwYXjbRpqjggejl.kWzoSjp,rGTWCkGgOUAzxfTtnmNhCyQPHofU u  ySHPHIPMetzvhltmbnttqUqxkcdOh,QwwEMEkOpysMPg dtjhb.RLEJvMMsldb,HrcBNXdipGZykrjnHxdbifSqiKpFwE,jFhzuLqeANKt.USsM CsvBfOrVokdSr,VOmzTHaCjBHzchAVAKDKWCZUrxknfVD</value>
+                      <value>` +
+      instance.test_diagnosis +
+      `</value>
                     </value>
                   </items>
                   <!-- SLOT IN /data[at0001]/events[at0002]/data[at0003]/items[at0118] NOT PROCESSED -->
@@ -323,7 +359,9 @@ export class LabResultsService {
                       <value>Comment</value>
                     </name>
                     <value xsi:type="DV_TEXT">
-                      <value>RLDbjvkDt.HqrcuMZxadcxcdYgS  stTYAsSMcNWnKKqDYsNskKrGuuCXwbHGmQKyDY,BNBUYQRxTcv,FJXImZXpQtuRXJh,ShntNYBOdAzBrrhtkVTzQoWzgYdLjf.eHjcsvwkfb,DOLQJ, evFbHDFfiPxvUaktQGNutLlK KftFPpnwbsUiQfhWFVEVHqOLyvxLGSd WfCRfkYsB,WxxQqWMbTuNEbAqxgxMkOeZEPfijiCeLpo.eMgwkgSE</value>
+                      <value>` +
+      instance.comment_diagnosis +
+      `</value>
                     </value>
                   </items>
                 </data>
@@ -348,5 +386,19 @@ export class LabResultsService {
         </lifecycle_state>
       </version>
     </versions>`;
+    let params = new HttpParams().set('auditCommitter', 'Dr. Hayle, Meron');
+    return this.http
+      .post(
+        this.serverUrl +
+          'rest/v1/ehrs/35ee020e-4e43-4e1b-871c-aa940326b9cb/compositions',
+        template,
+        {
+          headers: this.headers,
+          params: params,
+        }
+      )
+      .toPromise()
+      .then((res) => res)
+      .catch((err) => err);
   }
 }
