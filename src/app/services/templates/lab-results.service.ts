@@ -10,7 +10,7 @@ export class LabResultsService {
   private headers = new HttpHeaders({
     'Content-Type': 'application/xml',
     Authorization:
-      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluQGNhYm9sYWJzLmNvbSIsImV4dHJhZGF0YSI6eyJvcmdfdWlkIjoiZTlkMTMyOTQtYmNlNy00NGU3LTk2MzUtOGU5MDZkYTBjOTE0In0sImlzc3VlZF9hdCI6IjIwMjAtMDctMTNUMDc6MTE6MTQuNDIzWiIsImV4cGlyZXNfYXQiOiIyMDIwLTA3LTE0VDA3OjExOjE0LjQ5N1oifQ.JAw34uABtSpb14ReaaDAAB7AzgqGG01ZDTbyHsksdCg',
+      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluQGNhYm9sYWJzLmNvbSIsImV4dHJhZGF0YSI6eyJvcmdfdWlkIjoiZTlkMTMyOTQtYmNlNy00NGU3LTk2MzUtOGU5MDZkYTBjOTE0In0sImlzc3VlZF9hdCI6IjIwMjAtMDctMTRUMTk6MDE6NTguNDUyWiIsImV4cGlyZXNfYXQiOiIyMDIwLTA3LTE1VDE5OjAxOjU4LjQ1MloifQ.DbzmR-Ii60mwENO-5ZENYuUzy0JudTqbPlFs1EqYBpM',
   });
 
   constructor(private http: HttpClient) {}
@@ -24,7 +24,9 @@ export class LabResultsService {
       <version xsi:type="ORIGINAL_VERSION">
         <contribution>
           <id xsi:type="HIER_OBJECT_ID">
-            <value>`+uuid.v4()+`</value>
+            <value>` +
+      uuid.v4() +
+      `</value>
           </id>
           <namespace>EHR::COMMON</namespace>
           <type>CONTRIBUTION</type>
@@ -34,7 +36,9 @@ export class LabResultsService {
           <committer xsi:type="PARTY_IDENTIFIED">
             <external_ref>
               <id xsi:type="HIER_OBJECT_ID">
-                <value>`+uuid.v4()+`</value>
+                <value>` +
+      uuid.v4() +
+      `</value>
               </id>
               <namespace>DEMOGRAPHIC</namespace>
               <type>PERSON</type>
@@ -94,7 +98,9 @@ export class LabResultsService {
           <composer xsi:type="PARTY_IDENTIFIED">
             <external_ref>
               <id xsi:type="HIER_OBJECT_ID">
-                <value>`+uuid.v4()+`</value>
+                <value>` +
+      uuid.v4() +
+      `</value>
               </id>
               <namespace>DEMOGRAPHIC</namespace>
               <type>PERSON</type>
@@ -390,11 +396,43 @@ export class LabResultsService {
     return this.http
       .post(
         this.serverUrl +
-          'rest/v1/ehrs/35ee020e-4e43-4e1b-871c-aa940326b9cb/compositions',
+          'rest/v1/ehrs/e5f3fc74-edbd-4dc1-9537-f8f037383968/compositions',
         template,
         {
           headers: this.headers,
           params: params,
+        }
+      )
+      .toPromise()
+      .then((res) => res)
+      .catch((err) => err);
+  }
+
+  fetchMedicalDatas(ehrUuid) {
+    return this.http
+      .get(
+        this.serverUrl + 'rest/v1/compositions?format=json&ehrUid=' + ehrUuid,
+        {
+          headers: this.headers,
+        }
+      )
+      .toPromise()
+      .then((res) => res)
+      .catch((err) => err);
+  }
+  fetchMedicalData(medicalUuid) {
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/text',
+      Accept: 'application/xml',
+      Authorization:
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluQGNhYm9sYWJzLmNvbSIsImV4dHJhZGF0YSI6eyJvcmdfdWlkIjoiZTlkMTMyOTQtYmNlNy00NGU3LTk2MzUtOGU5MDZkYTBjOTE0In0sImlzc3VlZF9hdCI6IjIwMjAtMDctMTRUMTk6MDE6NTguNDUyWiIsImV4cGlyZXNfYXQiOiIyMDIwLTA3LTE1VDE5OjAxOjU4LjQ1MloifQ.DbzmR-Ii60mwENO-5ZENYuUzy0JudTqbPlFs1EqYBpM',
+    });
+    return this.http
+      .get(
+        this.serverUrl + 'rest/v1/compositions/' + medicalUuid + '?format=html',
+        {
+          headers: headers,
+          responseType: 'text',
         }
       )
       .toPromise()

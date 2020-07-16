@@ -128,22 +128,22 @@
                       matInput
                       formControlName="conclusion"
                       placeholder="Conclusion"
-                    />
-                  </mat-form-field><br/>
+                    /> </mat-form-field
+                  ><br />
                   <mat-form-field>
                     <input
                       matInput
                       formControlName="test_diagnosis"
                       placeholder="Test Diagnosis"
-                    />
-                  </mat-form-field>&nbsp;
+                    /> </mat-form-field
+                  >&nbsp;
                   <mat-form-field>
                     <input
                       matInput
                       formControlName="comment_diagnosis"
                       placeholder="Comment on Diagnosis"
-                    /> </mat-form-field
-                  >
+                    />
+                  </mat-form-field>
                 </div>
               </div>
             </div>
@@ -153,4 +153,25 @@
       </div>
     </div>
   </div>
+  <div class="col-md-12" style="margin: 20px; margin-left: 10%;">
+    <h2>List of Medical Data(s)</h2>
+    <mat-list>
+      <mat-list-item *ngFor="let item of medicalDatas">
+        Patient: {{ item.subjectId }}, Template: {{ item.templateId }} , Medical
+        Data: <a href="#" (click)="fetchSingleData(item.uid)"> Data</a>
+      </mat-list-item>
+    </mat-list>
+  </div>
+</div>
+
+<div
+  class="col-md-12"
+  style="
+    margin: 20px;
+    margin-left: 10%;
+    width: 40% !important;
+    max-width: 40% !important;
+  "
+  [innerHTML]="medicalData"
+>
 </div>

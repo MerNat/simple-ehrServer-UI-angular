@@ -8,7 +8,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TemplatesComponent } from './templates/templates.component';
-import {MatInputModule} from '@angular/material/input'
+import {MatInputModule} from '@angular/material/input';
+import {MatListModule} from '@angular/material/list';
 import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
@@ -23,6 +24,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     ReactiveFormsModule,
     MatSelectModule,
     MatInputModule,
+    MatListModule,
     MatNativeDateModule,
     HttpClientModule,
   ],

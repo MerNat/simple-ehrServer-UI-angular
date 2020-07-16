@@ -11,7 +11,9 @@ import { LabResultsService } from '../services/templates/lab-results.service';
 export class TemplatesComponent implements OnInit {
   @Input() templateName: string;
   labResultForm: FormGroup;
+  medicalDatas = [];
 
+  medicalData;
   constructor(private labResultsService: LabResultsService) {}
 
   ngOnInit(): void {
@@ -20,6 +22,30 @@ export class TemplatesComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges): void {
     this.renderForm();
+    this.fetchMedicalDatas();
+  }
+
+  fetchMedicalDatas() {
+    this.labResultsService
+      .fetchMedicalDatas('e5f3fc74-edbd-4dc1-9537-f8f037383968')
+      .then((res) => {
+        console.log(res);
+        this.medicalDatas = res.result;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  fetchSingleData(medicalUuid: string) {
+    this.labResultsService
+      .fetchMedicalData(medicalUuid)
+      .then((res) => {
+        this.medicalData = res;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   renderForm() {
@@ -66,11 +92,18 @@ export class TemplatesComponent implements OnInit {
       return;
     }
     console.log(this.labResultForm.value);
-    this.labResultsService.createLabResult(this.labResultForm.value).then(result =>{
-      Swal.fire('Success', 'Medical record created.', 'success');
-      console.log(result);
-    }).catch(err=>{
-      console.log(err);
-    })
+    this.labResultsService
+      .createLabResult(this.labResultForm.value)
+      .then((result) => {
+        if (result.error) {
+          Swal.fire('Error Found', result.error.message, 'error');
+          return;
+        }
+        Swal.fire('Success', 'Medical record created.', 'success');
+        this.fetchMedicalDatas();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 }
