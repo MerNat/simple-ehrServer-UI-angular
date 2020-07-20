@@ -3,6 +3,10 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import { LabResultsService } from '../services/templates/lab-results.service';
 
+import { Subscription } from 'rxjs';
+import { Apollo } from 'apollo-angular';
+import gql from 'graphql-tag';
+
 @Component({
   selector: 'app-templates',
   templateUrl: './templates.component.html',
@@ -14,20 +18,115 @@ export class TemplatesComponent implements OnInit {
   medicalDatas = [];
 
   medicalData;
-  constructor(private labResultsService: LabResultsService) {}
+
+  rates: any[];
+  loading = true;
+  error: any;
+
+  private querySubscription: Subscription;
+
+  //constructor(private labResultsService: LabResultsService) {}
+  constructor(private apollo: Apollo) {}
 
   ngOnInit(): void {
-    this.renderForm();
+    //this.renderForm();
   }
-
+/*
   ngOnChanges(changes: SimpleChanges): void {
     this.renderForm();
     this.fetchMedicalDatas();
   }
+*/
 
+  process() {
+    let json = {
+      "compositions": {
+        "categoryDefiningcode": "EVENT",
+        "location": "firstLocation",
+        "progressNote": {
+          "someField": "SomeField"
+        },
+        "medicationOrder": [
+          {
+            "narrativeValue": "SomeString"
+          }
+        ],
+        "diagnosis": [
+          {
+            "commentValue": "My First Comment",
+            "diagnosisNameValue": "diagnosisNameHere",
+            "clinicalDescriptionValue": "theClinicalOne",
+            "courseDescriptionValue": "theCourseDescr",
+            "bodySite": {
+              "value": "theValue2"
+            }
+          },
+          {
+            "commentValue": "My Second Comment",
+            "diagnosisNameValue": "diagnosisNameSecond",
+            "clinicalDescriptionValue": "theClinicalTwo",
+            "courseDescriptionValue": "theCourseDescrTwo",
+            "bodySite": {"value": "theValue3"}
+          }
+        ]
+      }
+    }
+
+//mutation ($compositions: BaseTemplateEnV1Composition!) {
+    const query = gql`
+      mutation ($compositions: BaseTemplateEnV1Composition!) {
+        createBaseComposition(compositions: $compositions) {
+          categoryDefiningcode
+          location
+          progressNote {
+            id
+            someField
+          }
+          medicationOrder {
+            id
+            narrativeValue
+          }
+          diagnosis {
+            id
+            commentValue
+            clinicalDescriptionValue
+            diagnosisNameValue
+            bodySite {
+              id
+              value
+            }
+          }
+        }
+      }
+    `;
+
+    /*this.querySubscription = this.apollo
+      .watchQuery({
+        query: query,
+        variables: {
+          compositions: json,
+        },
+      })
+      .valueChanges.subscribe(({data}) => {
+
+      });
+      */
+      this.apollo.mutate({
+        mutation: query,
+        variables: {
+          composition: 'apollographql/apollo-client'
+        }
+      }).subscribe(({ data }) => {
+        console.log('got data', data);
+      },(error) => {
+        console.log('there was an error sending the query', error);
+      });
+
+  }
+/*
   fetchMedicalDatas() {
     this.labResultsService
-      .fetchMedicalDatas('e5f3fc74-edbd-4dc1-9537-f8f037383968')
+      .fetchMedicalDatas('d7fad085-5bbb-486e-8cfb-5ae040122f75')
       .then((res) => {
         console.log(res);
         this.medicalDatas = res.result;
@@ -106,4 +205,5 @@ export class TemplatesComponent implements OnInit {
         console.log(err);
       });
   }
+*/
 }
