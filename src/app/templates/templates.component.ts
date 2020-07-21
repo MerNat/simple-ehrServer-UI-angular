@@ -7,6 +7,68 @@ import { Subscription } from 'rxjs';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 
+
+// ADD_BASE_TEMPLATE
+const ADD_BASE_TEMPLATE = gql `
+  mutation ($compositions: BaseTemplateEnV1Composition!) {
+    createBaseComposition(compositions: $compositions) {
+      categoryDefiningcode
+      location
+      progressNote {
+        id
+        someField
+      }
+      medicationOrder {
+        id
+        narrativeValue
+      }
+      diagnosis {
+        id
+        commentValue
+        clinicalDescriptionValue
+        diagnosisNameValue
+        bodySite {
+          id
+          value
+        }
+      }
+    }
+  }
+  `;
+
+// COMPOSITION
+const COMPOSITION = {
+  compositions: {
+    categoryDefiningcode: 'EVENT',
+    location: 'firstLocation',
+    progressNote: {
+      someField: 'SomeField'
+    },
+    medicationOrder: [
+      {
+        narrativeValue: 'SomeString'
+      }
+    ],
+    diagnosis: [
+      {
+        commentValue: 'My First Comment',
+        diagnosisNameValue: 'diagnosisNameHere',
+        clinicalDescriptionValue: 'theClinicalOne',
+        courseDescriptionValue: 'theCourseDescr',
+        bodySite: {
+          value: 'theValue2'
+        }
+      },
+      {
+        commentValue: 'My Second Comment',
+        diagnosisNameValue: 'diagnosisNameSecond',
+        clinicalDescriptionValue: 'theClinicalTwo',
+        courseDescriptionValue: 'theCourseDescrTwo',
+        bodySite: {value: 'theValue3'}
+      }
+    ]
+  }
+ };
 @Component({
   selector: 'app-templates',
   templateUrl: './templates.component.html',
@@ -18,14 +80,12 @@ export class TemplatesComponent implements OnInit {
   medicalDatas = [];
 
   medicalData;
+  compositions;
 
   rates: any[];
   loading = true;
   error: any;
 
-  private querySubscription: Subscription;
-
-  //constructor(private labResultsService: LabResultsService) {}
   constructor(private apollo: Apollo) {}
 
   ngOnInit(): void {
@@ -38,90 +98,20 @@ export class TemplatesComponent implements OnInit {
   }
 */
 
-  process() {
-    let json = {
-      "compositions": {
-        "categoryDefiningcode": "EVENT",
-        "location": "firstLocation",
-        "progressNote": {
-          "someField": "SomeField"
-        },
-        "medicationOrder": [
-          {
-            "narrativeValue": "SomeString"
-          }
-        ],
-        "diagnosis": [
-          {
-            "commentValue": "My First Comment",
-            "diagnosisNameValue": "diagnosisNameHere",
-            "clinicalDescriptionValue": "theClinicalOne",
-            "courseDescriptionValue": "theCourseDescr",
-            "bodySite": {
-              "value": "theValue2"
-            }
-          },
-          {
-            "commentValue": "My Second Comment",
-            "diagnosisNameValue": "diagnosisNameSecond",
-            "clinicalDescriptionValue": "theClinicalTwo",
-            "courseDescriptionValue": "theCourseDescrTwo",
-            "bodySite": {"value": "theValue3"}
-          }
-        ]
-      }
-    }
-
-//mutation ($compositions: BaseTemplateEnV1Composition!) {
-    const query = gql`
-      mutation ($compositions: BaseTemplateEnV1Composition!) {
-        createBaseComposition(compositions: $compositions) {
-          categoryDefiningcode
-          location
-          progressNote {
-            id
-            someField
-          }
-          medicationOrder {
-            id
-            narrativeValue
-          }
-          diagnosis {
-            id
-            commentValue
-            clinicalDescriptionValue
-            diagnosisNameValue
-            bodySite {
-              id
-              value
-            }
-          }
-        }
-      }
-    `;
-
-    /*this.querySubscription = this.apollo
-      .watchQuery({
-        query: query,
-        variables: {
-          compositions: json,
-        },
-      })
-      .valueChanges.subscribe(({data}) => {
-
-      });
-      */
-      this.apollo.mutate({
-        mutation: query,
-        variables: {
-          composition: 'apollographql/apollo-client'
-        }
-      }).subscribe(({ data }) => {
-        console.log('got data', data);
-      },(error) => {
-        console.log('there was an error sending the query', error);
-      });
-
+  // tslint:disable-next-line: typedef
+  process(e) {
+    e.preventDefault();
+    this.apollo.mutate({
+      mutation: ADD_BASE_TEMPLATE,
+      variables: COMPOSITION
+    })
+    .subscribe(({ data }) => {
+      // this.loading = loading;
+      this.compositions;
+      console.log('data ', data);
+    },(error) => {
+      console.log('there was an error sending the query', error);
+    });
   }
 /*
   fetchMedicalDatas() {
