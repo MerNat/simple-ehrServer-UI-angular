@@ -6,6 +6,8 @@ import { LabResultsService } from '../services/templates/lab-results.service';
 import { Subscription } from 'rxjs';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
+import { MatTableDataSource } from '@angular/material/table';
+import { DataSource } from '@angular/cdk/table';
 
 
 // ADD_BASE_TEMPLATE
@@ -77,7 +79,11 @@ const COMPOSITION = {
 export class TemplatesComponent implements OnInit {
   @Input() templateName: string;
   labResultForm: FormGroup;
-  medicalDatas = [];
+  medicalDatas: MatTableDataSource<[]>;
+
+  displayedColumns: string[] = ['id', 'narrative_value',];
+  private querySubscription: Subscription;
+  dataSource = [];
 
   medicalData;
   compositions;
@@ -89,6 +95,7 @@ export class TemplatesComponent implements OnInit {
   constructor(private apollo: Apollo) {}
 
   ngOnInit(): void {
+    this.fetchComposition();
     //this.renderForm();
   }
 /*
@@ -99,6 +106,39 @@ export class TemplatesComponent implements OnInit {
 */
 
   // tslint:disable-next-line: typedef
+
+  fetchComposition(){
+    let dataSource = [];
+    const getCompositionsData = gql`
+      query {
+        getCompositions {
+          medicationOrder {
+            id
+            narrativeValue
+          }
+        }
+      }
+    `;
+    this.querySubscription = this.apollo.watchQuery<any>({
+      query: getCompositionsData
+    })
+      .valueChanges
+      .subscribe(({ data }) => {
+        const compositions = data['getCompositions'];
+        compositions.forEach(element => {
+          const medicationOrderList = element['medicationOrder'];
+          medicationOrderList.forEach(medicationOrder => {
+            const singleData = {
+              "id": medicationOrder.id,
+              "narrativeValue": medicationOrder.narrativeValue
+            };
+            dataSource.push(singleData);
+          });
+        });
+        this.medicalDatas = new MatTableDataSource(dataSource);
+      });
+  }
+
   process(e) {
     e.preventDefault();
     this.apollo.mutate({
@@ -109,6 +149,7 @@ export class TemplatesComponent implements OnInit {
       // this.loading = loading;
       this.compositions;
       console.log('data ', data);
+      this.fetchComposition();
     },(error) => {
       console.log('there was an error sending the query', error);
     });

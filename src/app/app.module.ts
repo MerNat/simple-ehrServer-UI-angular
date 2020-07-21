@@ -15,6 +15,8 @@ import { GraphQLModule } from './graphql.module';
 import { ApolloModule, APOLLO_OPTIONS } from "apollo-angular";
 import { HttpLinkModule, HttpLink } from "apollo-angular-link-http";
 import { InMemoryCache } from "apollo-cache-inmemory";
+// import { MatPaginatorModule, MatProgressSpinnerModule, MatSortModule, MatTableModule } from "@angular/material";
+import {MatTableModule} from "@angular/material/table";
 
 @NgModule({
   declarations: [AppComponent, TemplatesComponent],
@@ -25,6 +27,7 @@ import { InMemoryCache } from "apollo-cache-inmemory";
     MatSelectModule,
     FormsModule,
     ReactiveFormsModule,
+    MatTableModule,
     MatSelectModule,
     MatInputModule,
     MatListModule,
