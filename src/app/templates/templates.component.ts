@@ -38,39 +38,7 @@ const ADD_BASE_TEMPLATE = gql `
   }
   `;
 
-// COMPOSITION
-const COMPOSITION = {
-  compositions: {
-    categoryDefiningcode: 'EVENT',
-    location: 'firstLocation',
-    progressNote: {
-      someField: 'SomeField'
-    },
-    medicationOrder: [
-      {
-        narrativeValue: 'SomeString'
-      }
-    ],
-    diagnosis: [
-      {
-        commentValue: 'My First Comment',
-        diagnosisNameValue: 'diagnosisNameHere',
-        clinicalDescriptionValue: 'theClinicalOne',
-        courseDescriptionValue: 'theCourseDescr',
-        bodySite: {
-          value: 'theValue2'
-        }
-      },
-      {
-        commentValue: 'My Second Comment',
-        diagnosisNameValue: 'diagnosisNameSecond',
-        clinicalDescriptionValue: 'theClinicalTwo',
-        courseDescriptionValue: 'theCourseDescrTwo',
-        bodySite: {value: 'theValue3'}
-      }
-    ]
-  }
- };
+
 @Component({
   selector: 'app-templates',
   templateUrl: './templates.component.html',
@@ -80,6 +48,16 @@ export class TemplatesComponent implements OnInit {
   @Input() templateName: string;
   labResultForm: FormGroup;
   medicalDatas: MatTableDataSource<[]>;
+
+  llocation;
+  progressNote;
+  narrativeValue;
+  commentValue;
+  diagnosisNameValue;
+  clinicalDescriptionValue;
+  courseDescriptionValue;
+  bodySite;
+  categoryDefiningcode = 'EVENT';
 
   displayedColumns: string[] = ['id', 'narrative_value',];
   private querySubscription: Subscription;
@@ -140,18 +118,44 @@ export class TemplatesComponent implements OnInit {
   }
 
   process(e) {
+    let COMPOSITION = {
+      compositions: {
+        categoryDefiningcode: this.categoryDefiningcode,
+        location: this.llocation,
+        progressNote: {
+          someField: this.progressNote
+        },
+        medicationOrder: [
+          {
+            narrativeValue: this.narrativeValue
+          }
+        ],
+        diagnosis: [
+          {
+            commentValue: this.commentValue,
+            diagnosisNameValue: this.diagnosisNameValue,
+            clinicalDescriptionValue: this.clinicalDescriptionValue,
+            courseDescriptionValue: this.courseDescriptionValue,
+            bodySite: {
+              value: this.bodySite
+            }
+          }
+        ]
+      }
+     };
     e.preventDefault();
     this.apollo.mutate({
       mutation: ADD_BASE_TEMPLATE,
       variables: COMPOSITION
     })
     .subscribe(({ data }) => {
-      // this.loading = loading;
       this.compositions;
       console.log('data ', data);
+      Swal.fire('Success', 'Data created', 'success');
       this.fetchComposition();
     },(error) => {
       console.log('there was an error sending the query', error);
+      Swal.fire('Error Found', error.toString(), 'error');
     });
   }
 /*
